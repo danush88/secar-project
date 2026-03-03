@@ -17,6 +17,10 @@
             min-height: 100vh;
             padding: 20px;
         }
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
         .header {
             display: flex;
             justify-content: space-between;
@@ -68,7 +72,7 @@
             font-size: 24px;
             font-weight: bold;
         }
-        .habits-section {
+        .section-card {
             background: #1e2139;
             border-radius: 12px;
             padding: 20px;
@@ -141,23 +145,64 @@
             color: #8d93b5;
             margin-bottom: 15px;
         }
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .achievement-card {
+            background: #252a41;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .achievement-card.unlocked {
+            border: 1px solid #2ecc71;
+        }
+        .achievement-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .insight-card {
+            background: #252a41;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            text-align: left;
+            padding: 12px;
+            color: #8d93b5;
+            border-bottom: 1px solid #2a2e45;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #2a2e45;
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">⚡ SECAR PRO</div>
-        <div>🤖 AI Learning Active</div>
-    </div>
+    <div class="app-container">
+        <div class="header">
+            <div class="logo">⚡ SECAR PRO</div>
+            <div>🤖 AI Learning Active</div>
+        </div>
 
-    <div class="nav" id="nav">
-        <div class="nav-item active" onclick="showPage('dashboard')">Dashboard</div>
-        <div class="nav-item" onclick="showPage('analytics')">Analytics</div>
-        <div class="nav-item" onclick="showPage('habits')">Habits</div>
-        <div class="nav-item" onclick="showPage('achievements')">Achievements</div>
-        <div class="nav-item" onclick="showPage('insights')">Insights</div>
-    </div>
+        <div class="nav" id="nav">
+            <div class="nav-item active" onclick="showPage('dashboard')">Dashboard</div>
+            <div class="nav-item" onclick="showPage('analytics')">Analytics</div>
+            <div class="nav-item" onclick="showPage('habits')">Habits</div>
+            <div class="nav-item" onclick="showPage('achievements')">Achievements</div>
+            <div class="nav-item" onclick="showPage('insights')">Insights</div>
+        </div>
 
-    <div id="mainContent"></div>
+        <div id="mainContent"></div>
+    </div>
 
     <script>
         // Data
@@ -186,7 +231,7 @@
             });
         }
 
-        // Page content
+        // Page content functions
         function getDashboard() {
             const learnedCount = habits.filter(h => h.learned).length;
             const avgSuccess = Math.round(habits.reduce((sum, h) => sum + h.success, 0) / habits.length);
@@ -226,7 +271,7 @@
                         </div>
                     </div>
 
-                    <div class="habits-section">
+                    <div class="section-card">
                         <h2 style="margin-bottom: 15px;">Today's Habits</h2>
                         ${habits.map(habit => `
                             <div class="habit-card">
@@ -255,22 +300,21 @@
 
         function getAnalytics() {
             return `
-                <div class="habits-section">
+                <div class="section-card">
                     <h2 style="margin-bottom: 20px;">Analytics Dashboard</h2>
-                    <p style="color: #8d93b5;">Track your progress and AI learning patterns here.</p>
                     
                     <div style="margin-top: 20px;">
-                        <h3 style="margin-bottom: 10px;">Learning Progress</h3>
+                        <h3 style="margin-bottom: 15px;">Learning Progress</h3>
                         ${habits.map(h => `
-                            <div style="margin-bottom: 10px;">
-                                <div style="display: flex; justify-content: space-between;">
+                            <div style="margin-bottom: 15px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
                                     <span>${h.icon} ${h.name}</span>
                                     <span style="color: ${h.learned ? '#2ecc71' : '#f1c40f'};">${h.learned ? 'Learned' : 'Learning'}</span>
                                 </div>
                                 ${h.learned ? 
                                     `<div style="font-size: 12px; color: #8d93b5;">${h.initial || '?'} → ${h.learned}</div>` : 
-                                    `<div style="height: 4px; background: #2a2e45; margin-top: 5px;">
-                                        <div style="height: 100%; width: 70%; background: #f1c40f;"></div>
+                                    `<div style="height: 4px; background: #2a2e45; margin-top: 5px; border-radius: 2px;">
+                                        <div style="height: 100%; width: 70%; background: #f1c40f; border-radius: 2px;"></div>
                                     </div>`
                                 }
                             </div>
@@ -282,28 +326,30 @@
 
         function getHabits() {
             return `
-                <div class="habits-section">
+                <div class="section-card">
                     <h2 style="margin-bottom: 20px;">Habit Manager</h2>
-                    <table style="width: 100%; border-collapse: collapse;">
+                    <table>
                         <thead>
-                            <tr style="border-bottom: 1px solid #2a2e45;">
-                                <th style="padding: 10px; text-align: left;">Icon</th>
-                                <th style="padding: 10px; text-align: left;">Name</th>
-                                <th style="padding: 10px; text-align: left;">Initial</th>
-                                <th style="padding: 10px; text-align: left;">Learned</th>
-                                <th style="padding: 10px; text-align: left;">Streak</th>
-                                <th style="padding: 10px; text-align: left;">Success</th>
+                            <tr>
+                                <th>Icon</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Initial</th>
+                                <th>Learned</th>
+                                <th>Streak</th>
+                                <th>Success</th>
                             </tr>
                         </thead>
                         <tbody>
                             ${habits.map(h => `
-                                <tr style="border-bottom: 1px solid #2a2e45;">
-                                    <td style="padding: 10px;">${h.icon}</td>
-                                    <td style="padding: 10px;">${h.name}</td>
-                                    <td style="padding: 10px;">${h.initial || '—'}</td>
-                                    <td style="padding: 10px; color: ${h.learned ? '#2ecc71' : '#f1c40f'};">${h.learned || 'Learning'}</td>
-                                    <td style="padding: 10px;">🔥${h.streak}</td>
-                                    <td style="padding: 10px;">${h.success}%</td>
+                                <tr>
+                                    <td>${h.icon}</td>
+                                    <td>${h.name}</td>
+                                    <td>${h.category}</td>
+                                    <td>${h.initial || '—'}</td>
+                                    <td style="color: ${h.learned ? '#2ecc71' : '#f1c40f'};">${h.learned || 'Learning'}</td>
+                                    <td>🔥${h.streak}</td>
+                                    <td>${h.success}%</td>
                                 </tr>
                             `).join('')}
                         </tbody>
@@ -314,24 +360,40 @@
 
         function getAchievements() {
             return `
-                <div class="habits-section">
+                <div class="section-card">
                     <h2 style="margin-bottom: 20px;">Achievements</h2>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
-                        <div style="background: #252a41; padding: 15px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 32px;">🌅</div>
+                    <div class="achievement-grid">
+                        <div class="achievement-card">
+                            <div class="achievement-icon">🌅</div>
                             <div style="font-weight: bold;">Early Bird</div>
-                            <div style="font-size: 12px; color: #8d93b5;">Complete 5 habits before 8 AM</div>
+                            <div style="font-size: 12px; color: #8d93b5;">5 habits before 8 AM</div>
                         </div>
-                        <div style="background: #252a41; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #2ecc71;">
-                            <div style="font-size: 32px;">🧠</div>
+                        <div class="achievement-card unlocked">
+                            <div class="achievement-icon">🧠</div>
                             <div style="font-weight: bold;">Quick Learner</div>
                             <div style="font-size: 12px; color: #8d93b5;">AI learned your time</div>
                             <div style="color: #2ecc71; margin-top: 5px;">✓ Unlocked</div>
                         </div>
-                        <div style="background: #252a41; padding: 15px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 32px;">🔥</div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">🔥</div>
                             <div style="font-weight: bold;">On Fire</div>
                             <div style="font-size: 12px; color: #8d93b5;">7-day streak</div>
+                        </div>
+                        <div class="achievement-card unlocked">
+                            <div class="achievement-icon">⚡</div>
+                            <div style="font-weight: bold;">Power User</div>
+                            <div style="font-size: 12px; color: #8d93b5;">30 days active</div>
+                            <div style="color: #2ecc71; margin-top: 5px;">✓ Unlocked</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">🎯</div>
+                            <div style="font-weight: bold;">Goal Crusher</div>
+                            <div style="font-size: 12px; color: #8d93b5;">100 completions</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">👑</div>
+                            <div style="font-weight: bold;">Habit Master</div>
+                            <div style="font-size: 12px; color: #8d93b5;">10 habits</div>
                         </div>
                     </div>
                 </div>
@@ -340,27 +402,34 @@
 
         function getInsights() {
             return `
-                <div class="habits-section">
+                <div class="section-card">
                     <h2 style="margin-bottom: 20px;">AI Insights</h2>
-                    <div style="display: grid; gap: 15px;">
-                        <div style="background: #252a41; padding: 20px; border-radius: 8px;">
-                            <div style="font-size: 24px;">🧠</div>
-                            <div style="font-weight: bold;">Learning Pattern</div>
-                            <div style="color: #5b67ea; font-size: 18px; margin: 5px 0;">You're most productive in evenings</div>
-                            <div style="color: #8d93b5;">Based on 47 completions</div>
-                        </div>
-                        <div style="background: #252a41; padding: 20px; border-radius: 8px;">
-                            <div style="font-size: 24px;">⏰</div>
-                            <div style="font-weight: bold;">Optimal Times</div>
-                            <div style="color: #5b67ea; font-size: 18px; margin: 5px 0;">Best time to exercise: 6:00 PM</div>
-                            <div style="color: #8d93b5;">85% success rate</div>
-                        </div>
+                    
+                    <div class="insight-card">
+                        <div style="font-size: 24px; margin-bottom: 10px;">🧠</div>
+                        <div style="font-weight: bold; font-size: 16px;">Learning Pattern</div>
+                        <div style="color: #5b67ea; font-size: 18px; margin: 8px 0;">You're most productive in evenings</div>
+                        <div style="color: #8d93b5;">Based on 47 completions</div>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <div style="font-size: 24px; margin-bottom: 10px;">⏰</div>
+                        <div style="font-weight: bold; font-size: 16px;">Optimal Times</div>
+                        <div style="color: #5b67ea; font-size: 18px; margin: 8px 0;">Best time to exercise: 6:00 PM</div>
+                        <div style="color: #8d93b5;">85% success rate</div>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <div style="font-size: 24px; margin-bottom: 10px;">🔥</div>
+                        <div style="font-weight: bold; font-size: 16px;">Streak Alert</div>
+                        <div style="color: #5b67ea; font-size: 18px; margin: 8px 0;">You're on a 5-day streak!</div>
+                        <div style="color: #8d93b5;">Keep it up!</div>
                     </div>
                 </div>
             `;
         }
 
-        // Navigation
+        // Navigation function
         function showPage(page) {
             // Update active nav
             document.querySelectorAll('.nav-item').forEach(item => {
@@ -368,7 +437,7 @@
             });
             event.target.classList.add('active');
 
-            // Load content
+            // Load content based on page
             const content = document.getElementById('mainContent');
             switch(page) {
                 case 'dashboard':
@@ -386,6 +455,8 @@
                 case 'insights':
                     content.innerHTML = getInsights();
                     break;
+                default:
+                    content.innerHTML = getDashboard();
             }
         }
 
@@ -396,7 +467,7 @@
             // In a real app, this would update the data
         }
 
-        // Initialize dashboard
+        // Initialize dashboard on page load
         window.onload = function() {
             document.getElementById('mainContent').innerHTML = getDashboard();
         };
