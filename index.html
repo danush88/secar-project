@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SECAR PRO - Self-Evolving AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,73 +12,187 @@
             box-sizing: border-box;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', sans-serif;
             background: #0a0c1c;
             color: white;
             min-height: 100vh;
-            padding: 20px;
+            display: flex;
         }
-        .app-container {
-            max-width: 1400px;
-            margin: 0 auto;
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: #14172b;
+            padding: 30px 20px;
+            border-right: 1px solid #2a2e45;
         }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo span {
+            color: #5b67ea;
+        }
+
+        .nav-item {
+            padding: 12px 15px;
+            margin: 5px 0;
+            border-radius: 8px;
+            color: #8d93b5;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 15px;
+        }
+
+        .nav-item.active {
+            background: #5b67ea;
+            color: white;
+        }
+
+        .nav-item:hover:not(.active) {
+            background: #1e2139;
+            color: white;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 30px;
+            width: 220px;
+        }
+
+        .today-stats {
+            background: #1e2139;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .today-stats .label {
+            color: #8d93b5;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .today-stats .value {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .ai-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #5b67ea;
+            font-size: 13px;
+            background: #1e2139;
+            padding: 10px 15px;
+            border-radius: 8px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #2a2e45;
         }
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #5b67ea;
+
+        .greeting h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 5px;
         }
-        .nav {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 30px;
-            padding: 10px;
-            background: #14172b;
-            border-radius: 8px;
-        }
-        .nav-item {
-            padding: 8px 16px;
-            cursor: pointer;
+
+        .greeting .date {
             color: #8d93b5;
-            border-radius: 6px;
+            font-size: 14px;
         }
-        .nav-item.active {
-            background: #5b67ea;
-            color: white;
+
+        .context-tags {
+            display: flex;
+            gap: 10px;
         }
+
+        .tag {
+            background: #1e2139;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #8d93b5;
+        }
+
+        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 15px;
             margin-bottom: 30px;
         }
+
         .stat-card {
             background: #1e2139;
             padding: 20px;
-            border-radius: 12px;
+            border-radius: 10px;
         }
+
         .stat-card h3 {
-            font-size: 14px;
             color: #8d93b5;
+            font-size: 13px;
+            font-weight: 400;
             margin-bottom: 8px;
         }
+
         .stat-card p {
             font-size: 24px;
-            font-weight: bold;
+            font-weight: 600;
         }
+
+        /* Section Cards */
         .section-card {
             background: #1e2139;
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 20px;
             margin-bottom: 20px;
         }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .add-btn {
+            background: #5b67ea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Habit Cards */
         .habit-card {
             background: #252a41;
             padding: 15px;
@@ -86,33 +201,76 @@
             display: flex;
             align-items: center;
         }
+
         .habit-icon {
-            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            background: #1e2139;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
             margin-right: 15px;
         }
+
         .habit-info {
             flex: 1;
         }
+
         .habit-name {
             font-weight: 600;
             margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+
         .habit-time {
             font-size: 12px;
             color: #8d93b5;
         }
-        .learned-time {
+
+        .habit-time span {
             color: #2ecc71;
-            font-weight: bold;
+            font-weight: 600;
         }
+
         .badge {
             background: #2ecc71;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            display: inline-block;
-            margin-left: 10px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 500;
         }
+
+        .badge.learning {
+            background: #f1c40f;
+        }
+
+        .habit-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .habit-stats {
+            text-align: right;
+            margin-right: 20px;
+        }
+
+        .streak {
+            color: #f1c40f;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .success {
+            color: #2ecc71;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
         .complete-btn {
             background: #2ecc71;
             color: white;
@@ -122,105 +280,211 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: 18px;
-            margin-left: 15px;
         }
-        .complete-btn:hover {
-            transform: scale(1.1);
+
+        .why-btn {
+            background: none;
+            border: 1px solid #5b67ea;
+            color: #5b67ea;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
         }
-        .context-badge {
-            background: #1e2139;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            display: inline-block;
-            margin-right: 8px;
-            margin-top: 10px;
+
+        /* Table */
+        .habits-table {
+            width: 100%;
+            border-collapse: collapse;
         }
-        .greeting {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .date {
+
+        .habits-table th {
+            text-align: left;
+            padding: 15px;
             color: #8d93b5;
+            font-weight: 400;
+            font-size: 13px;
+            border-bottom: 1px solid #2a2e45;
+        }
+
+        .habits-table td {
+            padding: 15px;
+            border-bottom: 1px solid #2a2e45;
+        }
+
+        .confidence-badge {
+            background: #2ecc71;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            display: inline-block;
+        }
+
+        .confidence-badge.medium {
+            background: #f1c40f;
+        }
+
+        .confidence-badge.learning {
+            background: #e67e22;
+        }
+
+        /* Analytics Page */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .progress-item {
             margin-bottom: 15px;
         }
-        .achievement-grid {
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #2a2e45;
+            border-radius: 3px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #5b67ea;
+            border-radius: 3px;
+        }
+
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        /* Achievements */
+        .achievements-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
-            margin-top: 20px;
         }
+
         .achievement-card {
             background: #252a41;
             padding: 20px;
             border-radius: 8px;
             text-align: center;
         }
+
         .achievement-card.unlocked {
             border: 1px solid #2ecc71;
         }
+
         .achievement-icon {
             font-size: 32px;
             margin-bottom: 10px;
         }
+
+        .achievement-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .achievement-desc {
+            font-size: 11px;
+            color: #8d93b5;
+        }
+
+        .achievement-status {
+            font-size: 11px;
+            margin-top: 8px;
+            color: #2ecc71;
+        }
+
+        /* Insights */
+        .insights-grid {
+            display: grid;
+            gap: 15px;
+        }
+
         .insight-card {
             background: #252a41;
             padding: 20px;
             border-radius: 8px;
-            margin-bottom: 15px;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
+
+        .insight-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
         }
-        th {
-            text-align: left;
-            padding: 12px;
+
+        .insight-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .insight-text {
+            color: #5b67ea;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .insight-detail {
             color: #8d93b5;
-            border-bottom: 1px solid #2a2e45;
-        }
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #2a2e45;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="header">
-            <div class="logo">⚡ SECAR PRO</div>
-            <div>🤖 AI Learning Active</div>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <span>⚡</span> SECAR <span style="font-size: 12px; background: #5b67ea; padding: 2px 6px; border-radius: 4px; margin-left: 5px;">PRO</span>
         </div>
 
-        <div class="nav" id="nav">
-            <div class="nav-item active" onclick="showPage('dashboard')">Dashboard</div>
-            <div class="nav-item" onclick="showPage('analytics')">Analytics</div>
-            <div class="nav-item" onclick="showPage('habits')">Habits</div>
-            <div class="nav-item" onclick="showPage('achievements')">Achievements</div>
-            <div class="nav-item" onclick="showPage('insights')">Insights</div>
-        </div>
+        <div class="nav-item active" onclick="showPage('dashboard')">Dashboard</div>
+        <div class="nav-item" onclick="showPage('analytics')">Analytics</div>
+        <div class="nav-item" onclick="showPage('habits')">Habits</div>
+        <div class="nav-item" onclick="showPage('achievements')">Achievements</div>
+        <div class="nav-item" onclick="showPage('insights')">Insights</div>
 
-        <div id="mainContent"></div>
+        <div class="sidebar-footer">
+            <div class="today-stats">
+                <div class="label">Today</div>
+                <div class="value" id="todayStats">3/8 habits</div>
+            </div>
+            <div class="ai-status">
+                <span>🔒</span> AI Learning Active
+            </div>
+        </div>
     </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent"></div>
 
     <script>
         // Data
         const habits = [
-            { id: 1, name: 'Morning Run', icon: '🏃', initial: '7:00', learned: '18:00', streak: 5, success: 85, category: 'fitness' },
-            { id: 2, name: 'Read Books', icon: '📚', initial: '21:00', learned: '22:00', streak: 3, success: 72, category: 'learning' },
-            { id: 3, name: 'Meditate', icon: '🧘', initial: '8:00', learned: null, streak: 2, success: 68, category: 'mindfulness' },
-            { id: 4, name: 'Drink Water', icon: '💧', initial: null, learned: null, streak: 7, success: 92, category: 'health' },
-            { id: 5, name: 'Journal', icon: '📝', initial: '22:00', learned: '23:00', streak: 4, success: 78, category: 'mindfulness' },
-            { id: 6, name: 'Gym', icon: '💪', initial: '18:00', learned: '19:00', streak: 6, success: 88, category: 'fitness' },
+            { id: 1, name: 'Morning Run', icon: '🏃', category: 'fitness', initial: '7:00', learned: '9:00', streak: 6, success: 100, confidence: 'High' },
+            { id: 2, name: 'Read Books', icon: '📚', category: 'learning', initial: '21:00', learned: '23:00', streak: 5, success: 100, confidence: 'High' },
+            { id: 3, name: 'Meditate', icon: '🧘', category: 'mindfulness', initial: '8:00', learned: '10:00', streak: 5, success: 100, confidence: 'High' },
+            { id: 4, name: 'Drink Water', icon: '💧', category: 'health', initial: null, learned: '18:00', streak: 5, success: 100, confidence: 'High' },
+            { id: 5, name: 'Journal', icon: '📝', category: 'mindfulness', initial: '22:00', learned: null, streak: 2, success: 100, confidence: 'Medium' },
+            { id: 6, name: 'Gym Workout', icon: '💪', category: 'fitness', initial: '18:00', learned: null, streak: 2, success: 100, confidence: 'Medium' },
+            { id: 7, name: 'Learn Coding', icon: '💻', category: 'learning', initial: '20:00', learned: null, streak: 2, success: 100, confidence: 'Medium' },
+            { id: 8, name: 'Call Family', icon: '📞', category: 'social', initial: '19:00', learned: null, streak: 2, success: 100, confidence: 'Medium' }
         ];
 
         // Helper functions
         function getGreeting() {
             const hour = new Date().getHours();
-            if (hour < 12) return 'Morning';
-            if (hour < 17) return 'Afternoon';
-            return 'Evening';
+            if (hour < 12) return 'Good Morning';
+            if (hour < 17) return 'Good Afternoon';
+            return 'Good Evening';
         }
 
         function getFormattedDate() {
@@ -231,104 +495,177 @@
             });
         }
 
-        // Page content functions
+        // Dashboard Page
         function getDashboard() {
             const learnedCount = habits.filter(h => h.learned).length;
             const avgSuccess = Math.round(habits.reduce((sum, h) => sum + h.success, 0) / habits.length);
             const maxStreak = Math.max(...habits.map(h => h.streak));
             
             return `
-                <div>
-                    <div class="greeting">Good ${getGreeting()}</div>
-                    <div class="date">${getFormattedDate()}</div>
-                    
-                    <div style="margin: 15px 0;">
-                        <span class="context-badge">🌙 Evening</span>
-                        <span class="context-badge">📅 Weekday</span>
-                        <span class="context-badge">📍 Home</span>
+                <div class="header">
+                    <div class="greeting">
+                        <h1>${getGreeting()}</h1>
+                        <div class="date">${getFormattedDate()}</div>
+                    </div>
+                    <div class="context-tags">
+                        <span class="tag">📅 Weekday</span>
+                        <span class="tag">🌙 Evening</span>
+                        <span class="tag">📍 Home</span>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Habits</h3>
+                        <p>${habits.length}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Done Today</h3>
+                        <p>3</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Best Streak</h3>
+                        <p>${maxStreak}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Learned Rules</h3>
+                        <p>${learnedCount}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Success Rate</h3>
+                        <p>${avgSuccess}%</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2>Today's Habits</h2>
+                        <button class="add-btn" onclick="alert('Add new habit feature coming soon!')">+ New Habit</button>
                     </div>
 
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <h3>Total Habits</h3>
-                            <p>${habits.length}</p>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Done Today</h3>
-                            <p>3</p>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Best Streak</h3>
-                            <p>${maxStreak}</p>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Learned Rules</h3>
-                            <p>${learnedCount}</p>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Success Rate</h3>
-                            <p>${avgSuccess}%</p>
-                        </div>
-                    </div>
-
-                    <div class="section-card">
-                        <h2 style="margin-bottom: 15px;">Today's Habits</h2>
-                        ${habits.map(habit => `
-                            <div class="habit-card">
-                                <div class="habit-icon">${habit.icon}</div>
-                                <div class="habit-info">
-                                    <div class="habit-name">
-                                        ${habit.name}
-                                        ${habit.learned ? '<span class="badge">✓ AI Optimized</span>' : ''}
-                                    </div>
-                                    <div class="habit-time">
-                                        ${habit.initial ? `<span style="text-decoration: line-through; opacity: 0.6;">${habit.initial}</span>` : ''}
-                                        ${habit.learned ? ` → <span class="learned-time">${habit.learned}</span>` : ' Learning pattern...'}
-                                    </div>
+                    ${habits.slice(0, 3).map(habit => `
+                        <div class="habit-card">
+                            <div class="habit-icon">${habit.icon}</div>
+                            <div class="habit-info">
+                                <div class="habit-name">
+                                    ${habit.name}
+                                    <span class="badge">AI Optimized</span>
                                 </div>
-                                <div style="text-align: right; margin-right: 15px;">
-                                    <div style="color: #f1c40f;">🔥${habit.streak}</div>
-                                    <div style="color: #2ecc71;">${habit.success}%</div>
+                                <div class="habit-time">
+                                    ${habit.initial ? `${habit.initial} → ` : ''}<span>${habit.learned || habit.initial || 'Learning...'}</span>
                                 </div>
+                                <div style="font-size: 12px; color: #8d93b5; margin-top: 3px;">Time for your habit!</div>
+                            </div>
+                            <div class="habit-actions">
+                                <div class="habit-stats">
+                                    <div class="streak">🔥${habit.streak}</div>
+                                    <div class="success">${habit.success}%</div>
+                                </div>
+                                <button class="why-btn" onclick="alert('AI suggests this because you complete it most often at this time!')">Why?</button>
                                 <button class="complete-btn" onclick="completeHabit(${habit.id})">✓</button>
                             </div>
-                        `).join('')}
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="section-card">
+                    <h2 style="margin-bottom: 15px;">Quick Insights</h2>
+                    
+                    <div style="background: #252a41; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="font-size: 20px; margin-bottom: 5px;">🧠</div>
+                        <div style="font-weight: 600; margin-bottom: 3px;">Learning Pattern</div>
+                        <div style="color: #5b67ea; font-size: 14px; margin-bottom: 3px;">You're most productive in the afternoon</div>
+                        <div style="color: #8d93b5; font-size: 12px;">Based on your completions</div>
+                    </div>
+                    
+                    <div style="background: #252a41; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="font-size: 20px; margin-bottom: 5px;">🔥</div>
+                        <div style="font-weight: 600; margin-bottom: 3px;">Streak Alert</div>
+                        <div style="color: #5b67ea; font-size: 14px; margin-bottom: 3px;">You're on a streak!</div>
+                        <div style="color: #8d93b5; font-size: 12px;">Keep it up!</div>
+                    </div>
+                    
+                    <div style="background: #252a41; padding: 15px; border-radius: 8px;">
+                        <div style="font-size: 20px; margin-bottom: 5px;">💡</div>
+                        <div style="font-weight: 600; margin-bottom: 3px;">Recommendation</div>
+                        <div style="color: #5b67ea; font-size: 14px; margin-bottom: 3px;">Try morning meditation</div>
+                        <div style="color: #8d93b5; font-size: 12px;">Boost your day</div>
                     </div>
                 </div>
             `;
         }
 
+        // Analytics Page
         function getAnalytics() {
             return `
-                <div class="section-card">
-                    <h2 style="margin-bottom: 20px;">Analytics Dashboard</h2>
-                    
-                    <div style="margin-top: 20px;">
-                        <h3 style="margin-bottom: 15px;">Learning Progress</h3>
+                <div class="header">
+                    <h1>Analytics Dashboard</h1>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Avg Confidence</h3>
+                        <p>50%</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Learned Rules</h3>
+                        <p>4</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Peak Hour</h3>
+                        <p>18:00</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Best Day</h3>
+                        <p>Wednesday</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Top Category</h3>
+                        <p>fitness</p>
+                    </div>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="section-card">
+                        <h2 style="margin-bottom: 20px;">Learning Progress</h2>
                         ${habits.map(h => `
-                            <div style="margin-bottom: 15px;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <div class="progress-item">
+                                <div class="progress-header">
                                     <span>${h.icon} ${h.name}</span>
                                     <span style="color: ${h.learned ? '#2ecc71' : '#f1c40f'};">${h.learned ? 'Learned' : 'Learning'}</span>
                                 </div>
                                 ${h.learned ? 
-                                    `<div style="font-size: 12px; color: #8d93b5;">${h.initial || '?'} → ${h.learned}</div>` : 
-                                    `<div style="height: 4px; background: #2a2e45; margin-top: 5px; border-radius: 2px;">
-                                        <div style="height: 100%; width: 70%; background: #f1c40f; border-radius: 2px;"></div>
-                                    </div>`
+                                    `<div style="font-size: 12px; color: #8d93b5; margin-bottom: 5px;">${h.initial || '?'} → ${h.learned}</div>` : 
+                                    `<div class="progress-bar"><div class="progress-fill" style="width: 70%;"></div></div>`
                                 }
                             </div>
                         `).join('')}
+                    </div>
+
+                    <div class="section-card">
+                        <h2 style="margin-bottom: 20px;">Category Performance</h2>
+                        <div>
+                            <div class="category-item"><span>Fitness</span> <span style="color: #2ecc71;">High</span></div>
+                            <div class="category-item"><span>Learning</span> <span style="color: #2ecc71;">High</span></div>
+                            <div class="category-item"><span>Mindfulness</span> <span style="color: #2ecc71;">High</span></div>
+                            <div class="category-item"><span>Health</span> <span style="color: #f1c40f;">Medium</span></div>
+                            <div class="category-item"><span>Social</span> <span style="color: #f1c40f;">Medium</span></div>
+                        </div>
                     </div>
                 </div>
             `;
         }
 
+        // Habits Page
         function getHabits() {
             return `
+                <div class="header">
+                    <h1>Habit Manager</h1>
+                    <button class="add-btn" onclick="alert('Add new habit feature coming soon!')">+ New Habit</button>
+                </div>
+
                 <div class="section-card">
-                    <h2 style="margin-bottom: 20px;">Habit Manager</h2>
-                    <table>
+                    <table class="habits-table">
                         <thead>
                             <tr>
                                 <th>Icon</th>
@@ -336,8 +673,10 @@
                                 <th>Category</th>
                                 <th>Initial</th>
                                 <th>Learned</th>
+                                <th>Confidence</th>
                                 <th>Streak</th>
                                 <th>Success</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -348,8 +687,10 @@
                                     <td>${h.category}</td>
                                     <td>${h.initial || '—'}</td>
                                     <td style="color: ${h.learned ? '#2ecc71' : '#f1c40f'};">${h.learned || 'Learning'}</td>
-                                    <td>🔥${h.streak}</td>
+                                    <td><span class="confidence-badge ${h.confidence.toLowerCase()}">${h.confidence}</span></td>
+                                    <td>${h.streak}</td>
                                     <td>${h.success}%</td>
+                                    <td><button class="complete-btn" style="width: 30px; height: 30px;" onclick="completeHabit(${h.id})">✓</button></td>
                                 </tr>
                             `).join('')}
                         </tbody>
@@ -358,78 +699,90 @@
             `;
         }
 
+        // Achievements Page
         function getAchievements() {
             return `
-                <div class="section-card">
-                    <h2 style="margin-bottom: 20px;">Achievements</h2>
-                    <div class="achievement-grid">
-                        <div class="achievement-card">
-                            <div class="achievement-icon">🌅</div>
-                            <div style="font-weight: bold;">Early Bird</div>
-                            <div style="font-size: 12px; color: #8d93b5;">5 habits before 8 AM</div>
-                        </div>
-                        <div class="achievement-card unlocked">
-                            <div class="achievement-icon">🧠</div>
-                            <div style="font-weight: bold;">Quick Learner</div>
-                            <div style="font-size: 12px; color: #8d93b5;">AI learned your time</div>
-                            <div style="color: #2ecc71; margin-top: 5px;">✓ Unlocked</div>
-                        </div>
-                        <div class="achievement-card">
-                            <div class="achievement-icon">🔥</div>
-                            <div style="font-weight: bold;">On Fire</div>
-                            <div style="font-size: 12px; color: #8d93b5;">7-day streak</div>
-                        </div>
-                        <div class="achievement-card unlocked">
-                            <div class="achievement-icon">⚡</div>
-                            <div style="font-weight: bold;">Power User</div>
-                            <div style="font-size: 12px; color: #8d93b5;">30 days active</div>
-                            <div style="color: #2ecc71; margin-top: 5px;">✓ Unlocked</div>
-                        </div>
-                        <div class="achievement-card">
-                            <div class="achievement-icon">🎯</div>
-                            <div style="font-weight: bold;">Goal Crusher</div>
-                            <div style="font-size: 12px; color: #8d93b5;">100 completions</div>
-                        </div>
-                        <div class="achievement-card">
-                            <div class="achievement-icon">👑</div>
-                            <div style="font-weight: bold;">Habit Master</div>
-                            <div style="font-size: 12px; color: #8d93b5;">10 habits</div>
-                        </div>
+                <div class="header">
+                    <h1>Achievements</h1>
+                </div>
+
+                <div class="achievements-grid">
+                    <div class="achievement-card">
+                        <div class="achievement-icon">🌅</div>
+                        <div class="achievement-title">Early Bird</div>
+                        <div class="achievement-desc">Complete 5 habits before 8 AM</div>
+                    </div>
+                    <div class="achievement-card unlocked">
+                        <div class="achievement-icon">🧠</div>
+                        <div class="achievement-title">Quick Learner</div>
+                        <div class="achievement-desc">AI learns your optimal time</div>
+                        <div class="achievement-status">✓ Unlocked</div>
+                    </div>
+                    <div class="achievement-card">
+                        <div class="achievement-icon">🔥</div>
+                        <div class="achievement-title">On Fire</div>
+                        <div class="achievement-desc">7-day streak on any habit</div>
+                    </div>
+                    <div class="achievement-card unlocked">
+                        <div class="achievement-icon">⚡</div>
+                        <div class="achievement-title">Power User</div>
+                        <div class="achievement-desc">Use app for 30 days</div>
+                        <div class="achievement-status">✓ Unlocked</div>
+                    </div>
+                    <div class="achievement-card">
+                        <div class="achievement-icon">🎯</div>
+                        <div class="achievement-title">Goal Crusher</div>
+                        <div class="achievement-desc">Complete 100 habits</div>
+                    </div>
+                    <div class="achievement-card">
+                        <div class="achievement-icon">👑</div>
+                        <div class="achievement-title">Habit Master</div>
+                        <div class="achievement-desc">Create 10 different habits</div>
                     </div>
                 </div>
             `;
         }
 
+        // Insights Page
         function getInsights() {
             return `
-                <div class="section-card">
-                    <h2 style="margin-bottom: 20px;">AI Insights</h2>
-                    
+                <div class="header">
+                    <h1>AI Insights</h1>
+                </div>
+
+                <div class="insights-grid">
                     <div class="insight-card">
-                        <div style="font-size: 24px; margin-bottom: 10px;">🧠</div>
-                        <div style="font-weight: bold; font-size: 16px;">Learning Pattern</div>
-                        <div style="color: #5b67ea; font-size: 18px; margin: 8px 0;">You're most productive in evenings</div>
-                        <div style="color: #8d93b5;">Based on 47 completions</div>
+                        <div class="insight-icon">🧠</div>
+                        <div class="insight-title">Learning Pattern</div>
+                        <div class="insight-text">You're most productive in the afternoon</div>
+                        <div class="insight-detail">Based on your completions</div>
                     </div>
                     
                     <div class="insight-card">
-                        <div style="font-size: 24px; margin-bottom: 10px;">⏰</div>
-                        <div style="font-weight: bold; font-size: 16px;">Optimal Times</div>
-                        <div style="color: #5b67ea; font-size: 18px; margin: 8px 0;">Best time to exercise: 6:00 PM</div>
-                        <div style="color: #8d93b5;">85% success rate</div>
+                        <div class="insight-icon">⏰</div>
+                        <div class="insight-title">Optimal Times</div>
+                        <div class="insight-text">Best time to exercise: 6:00 PM</div>
+                        <div class="insight-detail">85% success rate</div>
                     </div>
                     
                     <div class="insight-card">
-                        <div style="font-size: 24px; margin-bottom: 10px;">🔥</div>
-                        <div style="font-weight: bold; font-size: 16px;">Streak Alert</div>
-                        <div style="color: #5b67ea; font-size: 18px; margin: 8px 0;">You're on a 5-day streak!</div>
-                        <div style="color: #8d93b5;">Keep it up!</div>
+                        <div class="insight-icon">🔥</div>
+                        <div class="insight-title">Streak Alert</div>
+                        <div class="insight-text">You're on a streak!</div>
+                        <div class="insight-detail">Keep it up!</div>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <div class="insight-icon">💡</div>
+                        <div class="insight-title">Recommendation</div>
+                        <div class="insight-text">Try morning meditation</div>
+                        <div class="insight-detail">Boost your day</div>
                     </div>
                 </div>
             `;
         }
 
-        // Navigation function
+        // Navigation
         function showPage(page) {
             // Update active nav
             document.querySelectorAll('.nav-item').forEach(item => {
@@ -437,7 +790,7 @@
             });
             event.target.classList.add('active');
 
-            // Load content based on page
+            // Load content
             const content = document.getElementById('mainContent');
             switch(page) {
                 case 'dashboard':
@@ -455,19 +808,19 @@
                 case 'insights':
                     content.innerHTML = getInsights();
                     break;
-                default:
-                    content.innerHTML = getDashboard();
             }
+
+            // Update today stats
+            document.getElementById('todayStats').textContent = '3/8 habits';
         }
 
-        // Habit completion
+        // Complete habit
         function completeHabit(id) {
             const habit = habits.find(h => h.id === id);
             alert(`✨ ${habit.name} completed! AI is learning your pattern.`);
-            // In a real app, this would update the data
         }
 
-        // Initialize dashboard on page load
+        // Initialize
         window.onload = function() {
             document.getElementById('mainContent').innerHTML = getDashboard();
         };
