@@ -1,631 +1,236 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SECAR PRO - Self-Evolving Context-Aware Rules</title>
-    <link rel="stylesheet" href="style.css">
+    <title>SECAR PRO - Self-Evolving AI</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-primary: #0a0c1c;
-            --bg-secondary: #14172b;
-            --bg-card: #1e2139;
-            --bg-card-hover: #252a41;
-            --accent: #5b67ea;
-            --accent-light: #7c88ff;
-            --success: #2ecc71;
-            --warning: #f1c40f;
-            --error: #e74c3c;
-            --text-primary: #ffffff;
-            --text-secondary: #8d93b5;
-            --border: #2a2e45;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .app-container {
-            display: flex;
-            height: 100vh;
-        }
-
-        .sidebar {
-            width: 280px;
-            background: var(--bg-secondary);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            padding: 24px 0;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            padding: 0 24px;
-            margin-bottom: 32px;
-        }
-
-        .logo-icon {
-            font-size: 32px;
-            color: var(--accent);
-            margin-right: 8px;
-        }
-
-        .logo-text {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .logo-badge {
-            background: var(--accent);
+            background: #0a0c1c;
             color: white;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-left: 8px;
-        }
-
-        .nav-menu {
-            flex: 1;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 24px;
-            margin: 4px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: var(--text-secondary);
-        }
-
-        .nav-item i {
-            width: 24px;
-            font-size: 18px;
-            margin-right: 12px;
-        }
-
-        .nav-item:hover {
-            background: var(--bg-card);
-            color: var(--text-primary);
-        }
-
-        .nav-item.active {
-            background: var(--accent);
-            color: white;
-        }
-
-        .sidebar-footer {
-            padding: 24px;
-            border-top: 1px solid var(--border);
-        }
-
-        .today-stats {
-            background: var(--bg-card);
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-        }
-
-        .stats-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
-
-        .stats-value {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .ai-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--accent);
-            font-size: 12px;
-            padding: 8px;
-            background: var(--bg-card);
-            border-radius: 8px;
-        }
-
-        .main-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px;
-            background: var(--bg-primary);
-        }
-
-        .dashboard-header {
-            margin-bottom: 24px;
-        }
-
-        .dashboard-header h1 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .dashboard-date {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            padding: 20px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-        }
-
-        .stat-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--accent);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            margin-right: 16px;
-        }
-
-        .stat-info h3 {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
-
-        .stat-info p {
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-
-        .habits-section, .insights-section {
-            background: var(--bg-card);
-            border-radius: 16px;
+            min-height: 100vh;
             padding: 20px;
         }
-
-        .section-header {
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 30px;
         }
-
-        .section-header h2 {
-            font-size: 18px;
-            font-weight: 600;
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #5b67ea;
         }
-
-        .add-btn {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
         }
-
-        .habit-card {
-            background: var(--bg-card-hover);
+        .stat-card {
+            background: #1e2139;
+            padding: 20px;
             border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
+        }
+        .habits-section, .insights-section {
+            background: #1e2139;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .habit-card {
+            background: #252a41;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            cursor: pointer;
-            transition: all 0.2s;
         }
-
-        .habit-card:hover {
-            transform: translateX(5px);
-            background: var(--bg-card);
-        }
-
-        .habit-icon {
-            font-size: 32px;
-            margin-right: 16px;
-        }
-
-        .habit-info {
-            flex: 1;
-        }
-
-        .habit-name {
-            font-weight: 600;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .habit-time {
-            font-size: 11px;
-            padding: 2px 6px;
-            background: var(--bg-card);
-            border-radius: 4px;
-            color: var(--accent);
-        }
-
-        .habit-action {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .habit-stats {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .habit-streak {
-            color: var(--warning);
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .habit-success {
-            color: var(--success);
-            font-size: 13px;
-            font-weight: 600;
-        }
-
         .complete-btn {
-            background: var(--success);
+            background: #2ecc71;
             color: white;
             border: none;
             width: 36px;
             height: 36px;
             border-radius: 8px;
-            font-size: 18px;
             cursor: pointer;
-            margin-left: 12px;
+            margin-left: auto;
         }
-
-        .complete-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .insight-card {
-            background: var(--bg-card-hover);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-        }
-
-        .insight-icon {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-
-        .insight-title {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .insight-text {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 4px;
-        }
-
-        .insight-detail {
+        .badge {
+            background: #2ecc71;
+            padding: 4px 12px;
+            border-radius: 20px;
             font-size: 12px;
-            color: var(--text-secondary);
+            display: inline-block;
+            margin-left: 10px;
         }
-
+        .nav {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 10px;
+            background: #14172b;
+            border-radius: 8px;
+        }
+        .nav-item {
+            padding: 8px 16px;
+            cursor: pointer;
+            color: #8d93b5;
+        }
+        .nav-item.active {
+            background: #5b67ea;
+            color: white;
+            border-radius: 6px;
+        }
         .context-badge {
-            background: var(--bg-card);
+            background: #1e2139;
             padding: 4px 10px;
             border-radius: 20px;
             font-size: 12px;
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
             display: inline-block;
             margin-right: 8px;
-        }
-
-        .badge {
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 10px;
-            display: inline-block;
-            margin-right: 4px;
-        }
-
-        .badge.learned {
-            background: #2ecc71;
-            color: white;
-        }
-
-        .badge.learning {
-            background: #f1c40f;
-            color: white;
-        }
-
-        .badge.context {
-            background: var(--accent);
-            color: white;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--bg-secondary);
-            border-radius: 24px;
-            width: 500px;
-            max-width: 90%;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .modal-header {
-            padding: 24px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-header h2 {
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .form-group {
-            padding: 0 24px 16px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 10px 12px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-primary);
-            font-size: 14px;
-            outline: none;
-        }
-
-        .modal-footer {
-            padding: 24px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-        }
-
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .btn-secondary {
-            background: var(--bg-card);
-            color: var(--text-primary);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 12px 24px;
-            border-radius: 8px;
-            color: white;
-            font-size: 14px;
-            z-index: 2000;
-            animation: slideIn 0.3s ease;
-        }
-
-        .notification.success {
-            background: var(--success);
-        }
-
-        .notification.warning {
-            background: var(--warning);
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="logo">
-                <div class="logo-icon">⚡</div>
-                <div class="logo-text">SECAR</div>
-                <div class="logo-badge">PRO</div>
-            </div>
-            
-            <nav class="nav-menu">
-                <div class="nav-item active" data-page="dashboard">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </div>
-                <div class="nav-item" data-page="analytics">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Analytics</span>
-                </div>
-                <div class="nav-item" data-page="habits">
-                    <i class="fas fa-list-check"></i>
-                    <span>Habits</span>
-                </div>
-                <div class="nav-item" data-page="achievements">
-                    <i class="fas fa-trophy"></i>
-                    <span>Achievements</span>
-                </div>
-                <div class="nav-item" data-page="insights">
-                    <i class="fas fa-lightbulb"></i>
-                    <span>Insights</span>
-                </div>
-            </nav>
-            
-            <div class="sidebar-footer">
-                <div class="today-stats">
-                    <div class="stats-label">Today</div>
-                    <div class="stats-value" id="todayStats">0/0 habits</div>
-                </div>
-                <div class="ai-status">
-                    <i class="fas fa-robot"></i>
-                    <span>AI Learning Active</span>
-                </div>
-            </div>
-        </aside>
-
-        <main class="main-content" id="mainContent">
-            <!-- Content loaded dynamically -->
-        </main>
+    <div class="header">
+        <div class="logo">⚡ SECAR PRO</div>
+        <div>AI Learning Active 🤖</div>
     </div>
 
-    <!-- New Habit Modal -->
-    <div id="habitModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Create New Habit</h2>
-                <button class="close-btn" onclick="closeModal()">&times;</button>
-            </div>
-            <form id="habitForm">
-                <div class="form-group">
-                    <label>Habit Name</label>
-                    <input type="text" id="habitName" required placeholder="e.g., Morning Run">
-                </div>
-                
-                <div class="form-group">
-                    <label>Category</label>
-                    <select id="habitCategory">
-                        <option value="fitness">Fitness</option>
-                        <option value="learning">Learning</option>
-                        <option value="mindfulness">Mindfulness</option>
-                        <option value="health">Health</option>
-                        <option value="productivity">Productivity</option>
-                        <option value="social">Social</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>Initial Time (optional)</label>
-                    <input type="time" id="habitTime">
-                </div>
-                
-                <div class="form-group">
-                    <label>Icon</label>
-                    <select id="habitIcon">
-                        <option value="🏃">🏃 Run</option>
-                        <option value="📚">📚 Read</option>
-                        <option value="💪">💪 Gym</option>
-                        <option value="🧘">🧘 Meditate</option>
-                        <option value="💧">💧 Water</option>
-                        <option value="📝">📝 Journal</option>
-                    </select>
-                </div>
-                
-                <div class="modal-footer">
-                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
-                    <button type="submit" class="btn-primary">Create Habit</button>
-                </div>
-            </form>
-        </div>
+    <div class="nav" id="nav">
+        <div class="nav-item active" onclick="showPage('dashboard')">Dashboard</div>
+        <div class="nav-item" onclick="showPage('analytics')">Analytics</div>
+        <div class="nav-item" onclick="showPage('habits')">Habits</div>
+        <div class="nav-item" onclick="showPage('achievements')">Achievements</div>
+        <div class="nav-item" onclick="showPage('insights')">Insights</div>
     </div>
 
-    <!-- Explanation Modal -->
-    <div id="explanationModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Why AI Suggested This</h2>
-                <button class="close-btn" onclick="closeExplanationModal()">&times;</button>
-            </div>
-            <div id="explanationContent" style="padding: 24px;">
-                <!-- Content filled dynamically -->
-            </div>
-        </div>
-    </div>
+    <div id="mainContent"></div>
 
-    <script src="app.js"></script>
+    <script>
+        // Simple working version
+        let currentPage = 'dashboard';
+        
+        const rules = [
+            { id: 1, name: 'Morning Run', icon: '🏃', time: '7:00', learned: '18:00', streak: 5, success: 85 },
+            { id: 2, name: 'Read Books', icon: '📚', time: '21:00', learned: '22:00', streak: 3, success: 72 },
+            { id: 3, name: 'Meditate', icon: '🧘', time: '8:00', learned: null, streak: 2, success: 68 },
+            { id: 4, name: 'Drink Water', icon: '💧', time: null, learned: null, streak: 7, success: 92 },
+        ];
+
+        function getGreeting() {
+            const hour = new Date().getHours();
+            if (hour < 12) return 'Morning';
+            if (hour < 17) return 'Afternoon';
+            return 'Evening';
+        }
+
+        function getFormattedDate() {
+            return new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+        }
+
+        function loadDashboard() {
+            return `
+                <div style="margin-bottom: 20px;">
+                    <h1>Good ${getGreeting()}</h1>
+                    <div style="color: #8d93b5;">${getFormattedDate()}</div>
+                    <div style="margin-top: 10px;">
+                        <span class="context-badge">🌙 Evening</span>
+                        <span class="context-badge">📅 Weekday</span>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card"><h3>Total Habits</h3><p style="font-size: 24px;">${rules.length}</p></div>
+                    <div class="stat-card"><h3>Done Today</h3><p style="font-size: 24px;">3</p></div>
+                    <div class="stat-card"><h3>Best Streak</h3><p style="font-size: 24px;">7</p></div>
+                    <div class="stat-card"><h3>Learned Rules</h3><p style="font-size: 24px;">2</p></div>
+                    <div class="stat-card"><h3>Success Rate</h3><p style="font-size: 24px;">79%</p></div>
+                </div>
+
+                <div class="habits-section">
+                    <h2 style="margin-bottom: 15px;">Today's Habits</h2>
+                    ${rules.map(rule => `
+                        <div class="habit-card">
+                            <div style="font-size: 24px; margin-right: 15px;">${rule.icon}</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">${rule.name}</div>
+                                ${rule.learned ? 
+                                    `<div style="font-size: 12px; color: #8d93b5;"><span style="text-decoration: line-through;">${rule.time}</span> → <span style="color: #2ecc71;">${rule.learned}</span></div>` : 
+                                    `<div style="font-size: 12px; color: #8d93b5;">Learning pattern...</div>`
+                                }
+                                <div style="margin-top: 5px;">
+                                    ${rule.learned ? 
+                                        '<span class="badge" style="background: #2ecc71;">✓ AI Optimized</span>' : 
+                                        '<span class="badge" style="background: #f1c40f;">⏳ Learning 70%</span>'
+                                    }
+                                </div>
+                            </div>
+                            <div style="text-align: right; margin-right: 15px;">
+                                <div>🔥${rule.streak}</div>
+                                <div style="color: #2ecc71;">${rule.success}%</div>
+                            </div>
+                            <button class="complete-btn" onclick="alert('Habit completed! AI is learning...')">✓</button>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="insights-section">
+                    <h2>Quick Insights</h2>
+                    <div style="margin-top: 15px;">
+                        <div style="background: #252a41; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                            <div style="font-size: 20px;">🧠</div>
+                            <div style="font-weight: 600;">Learning Pattern</div>
+                            <div style="color: #5b67ea;">You're most productive in evenings</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadAnalytics() {
+            return `<div class="habits-section"><h2>Analytics Dashboard</h2><p>Track your progress here...</p></div>`;
+        }
+
+        function loadHabits() {
+            return `<div class="habits-section"><h2>Habit Manager</h2><p>Manage all your habits...</p></div>`;
+        }
+
+        function loadAchievements() {
+            return `<div class="habits-section"><h2>Achievements</h2><p>Unlock badges as you progress...</p></div>`;
+        }
+
+        function loadInsights() {
+            return `<div class="habits-section"><h2>AI Insights</h2><p>Personalized recommendations...</p></div>`;
+        }
+
+        function showPage(page) {
+            currentPage = page;
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.textContent.toLowerCase().includes(page)) {
+                    item.classList.add('active');
+                }
+            });
+
+            const content = document.getElementById('mainContent');
+            switch(page) {
+                case 'dashboard': content.innerHTML = loadDashboard(); break;
+                case 'analytics': content.innerHTML = loadAnalytics(); break;
+                case 'habits': content.innerHTML = loadHabits(); break;
+                case 'achievements': content.innerHTML = loadAchievements(); break;
+                case 'insights': content.innerHTML = loadInsights(); break;
+            }
+        }
+
+        // Initialize
+        showPage('dashboard');
+        document.getElementById('todayStats').textContent = `0/${rules.length} habits`;
+    </script>
 </body>
 </html>
